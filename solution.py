@@ -335,30 +335,42 @@ def pause():
                     quit()
         FPSClock.tick(FPS)
 
-
 # главное меню игры
 def gameMenu():
     menu = True
+    b = 0
     while menu:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w:
+                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                    if b != 2:
+                         b += 1
+                    else:
+                        b = 0
+                if event.key == pygame.K_UP or event.key == pygame.K_w:
+                    if b != 0:
+                        b -= 1
+                    else:
+                        b = 2
+                if event.key == pygame.K_KP_ENTER or event.key == pygame.K_SPACE:
                     menu = False
-                    levelChoose()
-                if event.key == pygame.K_d:
-                    menu = False
-                    mapChoose("human")
-                elif event.key == pygame.K_s:
-                    pygame.quit()
-                    quit()
+                    if b == 0:
+                        levelChoose()
+                    elif b == 1:
+                        mapChoose("human")
+                    elif b == 2:
+                        pygame.quit()
+                        quit()
         gameDisplay.fill(black)
+        scroll = [(0, 0, 255), (0, 0, 255), (0, 0, 255)]
+        scroll[b] = (255, 0, 255)
         message_to_screen("ANdruha Krasava", blue, -250, "title")
-        gameDisplay.blit(msgfont.render("COMPUTER (press w)", True, blue), (700, 300))
-        gameDisplay.blit(msgfont.render("Human (press d)", True, blue), (700, 350))
-        gameDisplay.blit(msgfont.render("Quit (press s)", True, blue), (700, 400))
+        gameDisplay.blit(msgfont.render("COMPUTER", True, scroll[0]), (800, 300))
+        gameDisplay.blit(msgfont.render("Human", True, scroll[1]), (800, 350))
+        gameDisplay.blit(msgfont.render("Quit", True, scroll[2]), (800, 400))
         fighter1.update()
         fighter1.draw(gameDisplay)
         pygame.display.update()
@@ -368,28 +380,40 @@ def gameMenu():
 # выбор уровня сложности
 def levelChoose():
     levelChoose = True
+    b = 0
     while levelChoose:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_q:
+                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                    if b != 2:
+                         b += 1
+                    else:
+                        b = 0
+                if event.key == pygame.K_UP or event.key == pygame.K_w:
+                    if b != 0:
+                        b -= 1
+                    else:
+                        b = 2
+                if event.key == pygame.K_KP_ENTER or event.key == pygame.K_SPACE:
                     levelChoose = False
-                    mapChoose('easy')
-                if event.key == pygame.K_w:
-                    levelChoose = False
-                    mapChoose('normal')
-                if event.key == pygame.K_e:
-                    levelChoose = False
-                    mapChoose('hard')
+                    if b == 0:
+                        mapChoose('easy')
+                    elif b == 1:
+                        mapChoose('normal')
+                    elif b == 2:
+                        mapChoose('hard')
                 if event.key == pygame.K_BACKSPACE:
                     gameMenu()
+        scroll = [500] * 3
+        scroll[b] = scroll[b] - 20
         gameDisplay.fill(black)
         message_to_screen("choose difficulty level", blue, -250, "title")
-        gameDisplay.blit(msgfont.render("hacker (press q)", True, white), (500, 300))
-        gameDisplay.blit(msgfont.render("pro (press w)", True, blue), (500, 350))
-        gameDisplay.blit(msgfont.render("noob (press e)", True, red), (500, 400))
+        gameDisplay.blit(msgfont.render("hacker", True, white), (scroll[0], 300))
+        gameDisplay.blit(msgfont.render("pro", True, blue), (scroll[1], 350))
+        gameDisplay.blit(msgfont.render("noob", True, red), (scroll[2], 400))
         pygame.display.update()
         FPSClock.tick(FPS)
 
@@ -397,41 +421,40 @@ def levelChoose():
 # выбор уровня карты
 def mapChoose(difficulty='normal'):
     mapChoose = True
+    b = 0
     while mapChoose:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_q:
+                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                    if b != 5:
+                         b += 1
+                    else:
+                        b = 0
+                if event.key == pygame.K_UP or event.key == pygame.K_w:
+                    if b != 0:
+                        b -= 1
+                    else:
+                        b = 5
+                if event.key == pygame.K_KP_ENTER or event.key == pygame.K_SPACE:
                     mapChoose = False
-                    fight(difficulty, 0)
-                if event.key == pygame.K_w:
-                    mapChoose = False
-                    fight(difficulty, 1)
-                if event.key == pygame.K_e:
-                    mapChoose = False
-                    fight(difficulty, 2)
-                if event.key == pygame.K_r:
-                    mapChoose = False
-                    fight(difficulty, 3)
-                if event.key == pygame.K_t:
-                    mapChoose = False
-                    fight(difficulty, 4)
-                if event.key == pygame.K_a:
-                    mapChoose = False
-                    kek = randint(0, 4)
-                    fight(difficulty, kek)
+                    if b == 0:
+                        b = randint(1, 5)
+                    fight(difficulty, b - 1)
                 if event.key == pygame.K_BACKSPACE:
                     gameMenu()
         gameDisplay.fill(black)
+        scroll = [420] * 6
+        scroll[b] = scroll[b] - 20
         message_to_screen("choose your map", white, -250, "title")
-        gameDisplay.blit(msgfont.render("random (press a)", True, red), (420, 250))
-        gameDisplay.blit(msgfont.render("bomjatnik (press q)", True, orange), (420, 300))
-        gameDisplay.blit(msgfont.render("mortal kombat (press w)", True, yellow), (420, 350))
-        gameDisplay.blit(msgfont.render("dota (press e)", True, green), (420, 400))
-        gameDisplay.blit(msgfont.render("matrica (press r)", True, blue), (420, 450))
-        gameDisplay.blit(msgfont.render("html ubejishe (press t)", True, violet), (420, 500))
+        gameDisplay.blit(msgfont.render("random", True, red), (scroll[0], 250))
+        gameDisplay.blit(msgfont.render("bomjatnik", True, orange), (scroll[1], 300))
+        gameDisplay.blit(msgfont.render("mortal kombat", True, yellow), (scroll[2], 350))
+        gameDisplay.blit(msgfont.render("dota", True, green), (scroll[3], 400))
+        gameDisplay.blit(msgfont.render("matrica", True, blue), (scroll[4], 450))
+        gameDisplay.blit(msgfont.render("html ubejishe", True, violet), (scroll[5], 500))
         pygame.display.update()
         FPSClock.tick(FPS)
 
@@ -662,4 +685,3 @@ def draw_winmessage():
 
 
 gameMenu()
-
